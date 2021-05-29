@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import HomeScreen from './screens/HomeScreen';
 import Login from './screens/LoginScreen';
+import Profile from './screens/ProfileScreen';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { auth } from './firebase';
-import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, selectUser } from './userSlice';
 
 function App() {
@@ -19,14 +20,15 @@ function App() {
           login({
             uid: userAuth.uid,
             email: userAuth.email,
-          }))
+          })
+        );
       } else {
-        dispatch(logout);
+        dispatch(logout());
       }
     });
 
     return unsubscribe;
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="app">
@@ -35,6 +37,9 @@ function App() {
           <Login />
         ) : (
           <Switch>
+            <Route path="/profile">
+              <Profile />
+            </Route>
             <Route exact path="/">
               <HomeScreen />
             </Route>
